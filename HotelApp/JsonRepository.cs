@@ -39,10 +39,10 @@ namespace HotelApp
 
                 foreach (var bookingSM in bookingsSerializationModels)
                 {
-                    if (!hotelsCatalog.HasHotel(bookingSM.HotelId))
+                    if (!hotelsCatalog.HasHotel(bookingSM.HotelId!))
                         throw new ArgumentException($"Undefined hotel id \"{bookingSM.HotelId}\"");
 
-                    hotelsCatalog[bookingSM.HotelId].AddBooking(bookingSM.AsBooking()); 
+                    hotelsCatalog[bookingSM.HotelId!].AddBooking(bookingSM.AsBooking()); 
                 }
 
             }

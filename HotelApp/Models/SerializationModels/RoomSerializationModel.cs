@@ -4,12 +4,12 @@ namespace HotelApp.Models.SerializationModels
 {
     internal class RoomSerializationModel
     {
-        [JsonPropertyName("roomId")] public string Id { get; set; }
-        [JsonPropertyName("roomType")] public string Type { get; set; }
+        [JsonPropertyName("roomId")] public string? Id { get; set; }
+        [JsonPropertyName("roomType")] public string? Type { get; set; }
 
         public Room AsRoom()
         {
-            return new Room(Id, Type);
+            return new Room(Id!, Type!);
         }
     }
 }

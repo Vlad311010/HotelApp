@@ -5,7 +5,7 @@ namespace HotelApp
 {
     internal class Program
     {
-        private static HotelsCatalog catalog;
+        private static HotelsCatalog catalog = default!;
 
         private static void ParseAvailabilityCommand(string input)
         {
@@ -44,6 +44,18 @@ namespace HotelApp
             else if (!DateOnly.TryParseExact(endDateStr, dateFormat, out departureDate))
             {
                 Console.WriteLine("Error: invalid end date parameter");
+                return;
+            }
+
+            if (hotelId == null)
+            {
+                Console.WriteLine("Error: can't parse hotelId");
+                return;
+            }
+
+            if (roomType == null)
+            {
+                Console.WriteLine("Error: can't parse roomType");
                 return;
             }
 

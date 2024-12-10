@@ -2,11 +2,11 @@
 {
     internal class BookingSerializationModel
     {
-        public string HotelId { get; set; }
-        public string Arrival { get; set; }
-        public string Departure { get; set; }
-        public string RoomType { get; set; }
-        public string RoomRate { get; set; }
+        public string? HotelId { get; set; }
+        public string? Arrival { get; set; }
+        public string? Departure { get; set; }
+        public string? RoomType { get; set; }
+        public string? RoomRate { get; set; }
 
         private const string DateFormat = "yyyyMMdd";
 
@@ -20,7 +20,7 @@
             if (!DateOnly.TryParseExact(Departure, DateFormat, out departureDate))
                 throw new ArgumentException($"Can't parse departure date: {departureDate}");
 
-            return new Booking(arrivalDate, departureDate, RoomType, RoomRate);
+            return new Booking(arrivalDate, departureDate, RoomType!, RoomRate!);
         }
     }
 }
