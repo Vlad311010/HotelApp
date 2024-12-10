@@ -6,5 +6,10 @@ namespace HotelApp.Models.SerializationModels
     {
         [JsonPropertyName("roomId")] public string Id { get; set; }
         [JsonPropertyName("roomType")] public string Type { get; set; }
+
+        public Room AsRoom()
+        {
+            return new Room(Id, Type);
+        }
     }
 }

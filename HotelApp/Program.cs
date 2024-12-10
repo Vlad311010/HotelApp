@@ -1,11 +1,11 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
-using HotelApp.Models.SerializationModels;
+﻿using System.Text.RegularExpressions;
+using HotelApp.Models;
 
 namespace HotelApp
 {
     internal class Program
     {
+        private static HotelsCatalog catalog;
 
         private static void ParseAvailabilityCommand(string input)
         {
@@ -29,9 +29,9 @@ namespace HotelApp
             string? roomType = match.Groups[5].Success ? match.Groups[5].Value : null;
 
 
-            DateOnly startDate;
-            DateOnly endDate;
-            if (!DateOnly.TryParseExact(startDateStr, dateFormat, out startDate))
+            DateOnly arrivalDate;
+            DateOnly departureDate;
+            if (!DateOnly.TryParseExact(startDateStr, dateFormat, out arrivalDate))
             {
                 Console.WriteLine("Error: invalid start date parameter");
                 return;
@@ -39,20 +39,40 @@ namespace HotelApp
 
             if (string.IsNullOrEmpty(endDateStr))
             {
-                endDate = startDate;
+                departureDate = arrivalDate;
             }
-            else if (!DateOnly.TryParseExact(endDateStr, dateFormat, out endDate))
+            else if (!DateOnly.TryParseExact(endDateStr, dateFormat, out departureDate))
             {
                 Console.WriteLine("Error: invalid end date parameter");
                 return;
             }
 
 
-
-            Availability(hotelId, roomType, startDate, endDate);
+            Availability(hotelId, roomType, arrivalDate, departureDate);
         }
 
-        private static void Availability(string hotelId, string roomType, DateOnly startDate, DateOnly endDate) => Console.WriteLine($"SUCC {startDate} - {endDate}");
+        private static void Availability(string hotelId, string roomType, DateOnly arrivalDate, DateOnly departureDate)
+        {
+            if (!catalog.HasHotel(hotelId))
+            {
+                Console.WriteLine($"Error: No hotel with id \"{hotelId}\"");
+                return;
+            }
+
+            if (!catalog[hotelId].IsValidRoomType(roomType))
+            {
+                Console.WriteLine($"Error: Unknown room type \"{roomType}\"");
+                return;
+            }
+
+            if (arrivalDate > departureDate)
+            {
+                Console.WriteLine($"Error: Invalid booking dates range {arrivalDate} - {departureDate}");
+                return;
+            }
+
+            Console.WriteLine(catalog[hotelId].GetAvailableRoomCount(roomType, arrivalDate, departureDate));
+        }
 
 
         private static void ProgramLoop()
@@ -70,8 +90,11 @@ namespace HotelApp
 
         static void Main(string[] args)
         {
-            HotelsJsonRepository.Deserialize();
-            // ProgramLoop();
+            // Availability(H1, 20240901 - 20240903, DBL)
+            // Availability(H1, 20240901, SGL)
+
+            catalog = JsonRepository.Deserialize();
+            ProgramLoop();
         }
     }
 }
