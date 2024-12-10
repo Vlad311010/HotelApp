@@ -42,7 +42,7 @@ namespace HotelApp
                     if (!hotelsCatalog.HasHotel(bookingSM.HotelId))
                         throw new ArgumentException($"Undefined hotel id \"{bookingSM.HotelId}\"");
 
-                    hotelsCatalog[bookingSM.HotelId].AddBokking(bookingSM.AsBooking()); 
+                    hotelsCatalog[bookingSM.HotelId].AddBooking(bookingSM.AsBooking()); 
                 }
 
             }

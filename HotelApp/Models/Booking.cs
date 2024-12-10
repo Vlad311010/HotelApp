@@ -1,6 +1,6 @@
 ﻿namespace HotelApp.Models
 {
-    internal class Booking
+    public class Booking
     {
         public DateOnly Arrival { get; private set; }
         public DateOnly Departure { get; private set; }

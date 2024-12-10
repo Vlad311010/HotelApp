@@ -1,6 +1,6 @@
 ﻿namespace HotelApp.Models
 {
-    internal class Hotel
+    public class Hotel
     {
         public string Id { get; private set; }
         public string Name { get; private set; }
@@ -24,7 +24,7 @@
             _rooms = rooms.ToArray();
         }
 
-        public void AddBokking(Booking booking)
+        public void AddBooking(Booking booking)
         {
             ArgumentNullException.ThrowIfNull(booking, nameof(booking));
 
