@@ -5,7 +5,9 @@ namespace HotelApp
 {
     internal class Program
     {
-        private static HotelsCatalog catalog = default!;
+        private static HotelsCatalog _catalog = default!;
+        private static string _hotelsJson = "./Resources/hotels.json";
+        private static string _bookingJson = "./Resources/bookings.json";
 
         private static void ParseAvailabilityCommand(string input)
         {
@@ -65,13 +67,13 @@ namespace HotelApp
 
         private static void Availability(string hotelId, string roomType, DateOnly arrivalDate, DateOnly departureDate)
         {
-            if (!catalog.HasHotel(hotelId))
+            if (!_catalog.HasHotel(hotelId))
             {
                 Console.WriteLine($"Error: No hotel with id \"{hotelId}\"");
                 return;
             }
 
-            if (!catalog[hotelId].IsValidRoomType(roomType))
+            if (!_catalog[hotelId].IsValidRoomType(roomType))
             {
                 Console.WriteLine($"Error: Unknown room type \"{roomType}\"");
                 return;
@@ -83,7 +85,7 @@ namespace HotelApp
                 return;
             }
 
-            Console.WriteLine(catalog[hotelId].GetAvailableRoomCount(roomType, arrivalDate, departureDate));
+            Console.WriteLine(_catalog[hotelId].GetAvailableRoomCount(roomType, arrivalDate, departureDate));
         }
 
 
@@ -100,12 +102,35 @@ namespace HotelApp
             }
         }
 
+        static private void ParseArgs(string[] args)
+        {
+            if (args.Length == 0)
+                return;
+
+            int idx = 0;
+            while (idx < args.Length) 
+            {
+                switch (args[idx])
+                {
+                    case "--hotels":
+                    case "-h":
+                        _hotelsJson = args[++idx];
+                        break;
+                    case "--bookings":
+                    case "-b":
+                        _bookingJson = args[++idx];
+                        break;
+                }
+
+                idx++;
+            }
+        }
+
         static void Main(string[] args)
         {
-            // Availability(H1, 20240901 - 20240903, DBL)
-            // Availability(H1, 20240901, SGL)
+            ParseArgs(args);
+            _catalog = JsonRepository.Deserialize(_hotelsJson, _bookingJson);
 
-            catalog = JsonRepository.Deserialize();
             ProgramLoop();
         }
     }

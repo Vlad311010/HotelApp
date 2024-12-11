@@ -6,20 +6,17 @@ namespace HotelApp
 {
     internal static class JsonRepository
     {
-        private static readonly string _hotelsFilePath = "./Resources/hotels.json";
-        private static readonly string _bookingFilePath = "./Resources/bookings.json";
-
         private static readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        public static HotelsCatalog Deserialize()
+        public static HotelsCatalog Deserialize(string hotelsDataSource, string bookingDataSource)
         {
             HotelsCatalog hotelsCatalog;
 
             // read hotels data
-            using (var reader = new StreamReader(_hotelsFilePath))
+            using (var reader = new StreamReader(hotelsDataSource))
             {
                 string json = reader.ReadToEnd();
                 HotelSerializationModel[]? hotelSerializationModels = JsonSerializer.Deserialize<HotelSerializationModel[]>(json, _options);
@@ -30,7 +27,7 @@ namespace HotelApp
             }
             
             // read booking data
-            using (var reader = new StreamReader(_bookingFilePath))
+            using (var reader = new StreamReader(bookingDataSource))
             {
                 string json = reader.ReadToEnd();
                 BookingSerializationModel[]? bookingsSerializationModels = JsonSerializer.Deserialize<BookingSerializationModel[]>(json, _options);
